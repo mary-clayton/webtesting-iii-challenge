@@ -21,12 +21,17 @@ test('should match snapshot', () => {
 });
 
 // defaults to unlocked and open
-test('defaults to unlocked and open', () => {
+describe('Controls work', () => {
+it('defaults to unlocked and open', () => {
     const mock = jest.fn();
+    // provide buttons to toggle the closed and locked states.
      const {queryByText} = render(<Controls locked={false} closed={false} toggleClosed={mock}/>)
+     // buttons' text changes to reflect the state the door will be in if clicked
      const lockButton = queryByText("Lock Gate");
+     // the locked toggle button is disabled if the gate is open
      expect(lockButton.disabled).toBe(true)
      const closeButton = queryByText("Close Gate");
+    // the closed toggle button is disabled if the gate is locked
      expect(closeButton.disabled).toBe(false)
      fireEvent.click(closeButton);
      expect(mock).toBeCalled()
@@ -34,11 +39,14 @@ test('defaults to unlocked and open', () => {
 //cannot be closed or opened if it is locked
 it("can't be closed or open when locked", () => {
     const mock = jest.fn();
+      // provide buttons to toggle the closed and locked states.
     const {queryByText} = render(<Controls locked={true} closed={true} toggleLocked={mock} />)
+    // buttons' text changes to reflect the state the door will be in if clicked
     const unlockButton = queryByText("Unlock Gate");
     expect(unlockButton.disabled).toBe(false)
     const openButton =  queryByText("Open Gate");
     expect(openButton.disabled).toBe(true)
     fireEvent.click(unlockButton);
     expect(mock).toBeCalled();
+});
 });
